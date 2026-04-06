@@ -23,7 +23,7 @@ A real-time motion and AI-powered person detection application built with Python
 
 ## 🖥 Requirements
 
-- Python **3.9 or newer**
+- Python **3.12 or newer**
 - A working **webcam**
 - Windows, macOS, or Linux
 
