@@ -1,72 +1,154 @@
-1. Overview
-This document explains how to build and run an advanced motion detection and AI person detection system using Python. The system includes a graphical user interface, automatic recording, snapshots, and AI-based human detection using YOLO.
-2. Features
+# 🎯 Ultimate AI Motion Detection System
 
-• Live camera preview
-• Motion detection using background subtraction
-• AI person detection using YOLOv8
-• Automatic video recording when motion/person detected
-• Manual recording button
-• Snapshot capture
-• Adjustable sensitivity and recording duration
-• Recording browser inside the application
-• Works on CPU-only laptops
+A real-time motion and AI-powered person detection application built with Python, OpenCV, and YOLOv8. Designed to run entirely on CPU — no GPU required.
 
-3. Requirements
+---
 
-Install Python.
+## 📸 Features
 
-Then install required libraries using:
+| Feature | Description |
+|---|---|
+| 🎥 Live Preview | Real-time webcam feed displayed in the app window |
+| 🟢 Motion Detection | Background subtraction via OpenCV MOG2 |
+| 🤖 AI Person Detection | YOLOv8n model detects people in each frame |
+| ⏺ Auto Recording | Automatically records video when motion/person is detected |
+| 🖐 Manual Recording | Start/stop recording manually with a button |
+| 📷 Snapshot | Save a still image from the live feed at any time |
+| 🎚 Adjustable Sensitivity | Tune motion area, threshold, and recording duration |
+| 📂 Recording Browser | Browse and open saved recordings from inside the app |
+| 🔴 REC Indicator | On-screen red dot + "REC" label while recording |
+| 📊 Status Bar | Live display of current detection state |
 
+---
+
+## 🖥 Requirements
+
+- Python **3.9 or newer**
+- A working **webcam**
+- Windows, macOS, or Linux
+
+### Python Libraries
+
+Install all dependencies with a single command:
+
+```bash
 pip install opencv-python pillow numpy ultralytics
+```
 
-4. How the System Works
-The system captures video from the webcam using OpenCV. Motion detection is performed using background subtraction. If AI detection is enabled, a YOLOv8 model analyzes each frame to detect people. When motion or a person is detected, the system automatically records video.
+---
 
-5. Step-by-Step Setup
+## 🚀 Quick Start
 
-1. Install Python.
-2. Install required libraries.
-3. Save the provided Python code as:
+### 1. Clone or download this project
 
-ultimate_motion_detector_v2.py
+Place all files in a folder, e.g.:
 
-4. Open Command Prompt in the project folder.
-5. Run the program using:
+```
+Project_1/
+└── ultimate_motion_detector_v2.py
+```
 
+### 2. Install dependencies
+
+```bash
+pip install opencv-python pillow numpy ultralytics
+```
+
+### 3. Run the application
+
+```bash
 python ultimate_motion_detector_v2.py
+```
 
-6. The camera window will open with the application interface.
+> **Note:** On the very first run, YOLOv8 will automatically download the model weights file `yolov8n.pt` (~6 MB). Internet access is required for this one-time download.
 
-6. User Interface Controls
+---
 
-Min Motion Area:
-Controls how large a moving object must be before it triggers detection.
+## 🗂 Folder Structure
 
-Threshold:
-Controls motion sensitivity.
-
-Record Seconds:
-How long recording continues after motion stops.
-
-Enable AI Person Detection:
-Activates YOLO-based human detection.
-
-Snapshot Button:
-Saves a still image to the snapshots folder.
-
-Manual Record Button:
-Starts/stops recording manually.
-
-Browse Recordings:
-Shows saved recordings.
-
-7. Folder Structure
-
-project_folder
+```
+Project_1/
 │
-├── ultimate_motion_detector_v2.py
-├── recordings
-│   └── saved video files
-└── snapshots
-    └── captured images
+├── ultimate_motion_detector_v2.py   ← Main application
+├── README.md                        ← This file
+│
+├── recordings/                      ← Auto-created; .avi video files saved here
+│   └── 20240101_120000.avi
+│
+└── snapshots/                       ← Auto-created; .jpg snapshot images saved here
+    └── 20240101_120015.jpg
+```
+
+---
+
+## 🎛 UI Controls
+
+| Control | Description |
+|---|---|
+| **Min Motion Area** | Minimum contour size (pixels²) to count as motion. Increase to ignore small movements. |
+| **Threshold** | Sensitivity of the background subtractor. Lower = more sensitive. |
+| **Record Seconds** | How many extra seconds to keep recording after motion stops. |
+| **Enable AI Person Detection** | Toggle YOLOv8 person detection on/off. |
+| **📷 Snapshot** | Saves a JPEG image to the `snapshots/` folder. |
+| **⏺ Manual Record** | Starts/stops recording regardless of motion. Button label updates to show state. |
+| **📂 Browse Recordings** | Opens a list of saved recordings with an "Open Folder" shortcut. |
+
+---
+
+## 🔍 How It Works
+
+```
+Webcam Frame
+    │
+    ├─► Background Subtraction (MOG2)
+    │       └─ Contours too small?  →  Ignore
+    │       └─ Large contour found? →  Motion Detected ✅
+    │
+    ├─► YOLOv8 (background thread, if enabled)
+    │       └─ Class 0 (person) found? → Person Detected ✅
+    │
+    └─► Trigger = Motion OR Person OR Manual Record
+            └─ Start/continue recording to recordings/
+            └─ Stop recording after N seconds of silence
+```
+
+The AI detection runs in a **separate background thread** so it never blocks the live preview, keeping the UI smooth even on CPU-only machines.
+
+---
+
+## 🎨 Color Legend (On-screen overlays)
+
+| Color | Meaning |
+|---|---|
+| 🟢 Green rectangle | Motion contour detected |
+| 🔵 Blue/Red rectangle | AI-detected person |
+| 🔴 Red dot + "REC" | Currently recording |
+
+---
+
+## ⚙️ Troubleshooting
+
+| Problem | Solution |
+|---|---|
+| `Cannot open camera` error | Check webcam is connected and not used by another app |
+| AI detection checkbox greyed out | Run `pip install ultralytics` and restart |
+| YOLOv8 download fails | Check your internet connection on first launch |
+| Video is choppy | Disable AI detection to reduce CPU load |
+| Recordings folder is empty | Make sure motion/person was detected, or use Manual Record |
+
+---
+
+## 📦 Dependencies
+
+| Package | Purpose |
+|---|---|
+| `opencv-python` | Camera capture, background subtraction, drawing |
+| `pillow` | Converting OpenCV frames for Tkinter display |
+| `numpy` | Array operations |
+| `ultralytics` | YOLOv8 AI person detection |
+
+---
+
+## 📄 License
+
+This project is provided as-is for personal and educational use.
